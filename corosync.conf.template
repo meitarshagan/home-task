@@ -1,0 +1,21 @@
+totem {
+    version: 2
+    secauth: off
+    cluster_name: mycluster
+    transport: udpu
+}
+
+nodelist {
+    {{NODELIST}}
+}
+
+quorum {
+    provider: corosync_votequorum
+}
+
+logging {
+    filelog {
+        path: /var/log/corosync/corosync.log
+        level: info
+    }
+}

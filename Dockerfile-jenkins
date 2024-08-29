@@ -1,0 +1,23 @@
+# Base image
+FROM ubuntu:18.04
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y wget openjdk-11-jdk
+
+# Set environment variables
+ENV JENKINS_HOME=/var/jenkins_home
+ENV JENKINS_PORT=8080
+
+# Create Jenkins home directory
+RUN mkdir -p $JENKINS_HOME
+
+# Download Jenkins WAR file
+RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /usr/local/bin/jenkins.war
+
+# Expose the Jenkins port
+EXPOSE $JENKINS_PORT
+
+# Run Jenkins
+CMD ["java", "-jar", "/usr/local/bin/jenkins.war"]
+

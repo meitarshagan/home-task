@@ -1,0 +1,21 @@
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y apache2
+
+RUN apt-get install -y corosync pacemaker crmsh vim
+
+EXPOSE 5405/udp 2224/tcp
+
+COPY start-service.sh /start-service.sh
+
+RUN chmod a+x start-service.sh 
+
+COPY corosync.conf.template /etc/corosync/corosync.conf.template
+
+COPY index.html /var/www/html/index.html 
+
+ENTRYPOINT ["/start-service.sh"]
+
+
