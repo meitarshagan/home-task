@@ -1,27 +1,34 @@
-# Base image
 FROM ubuntu:18.04
 
 
-# Install necessary packages
 RUN apt-get update && \
-    apt-get install -y wget openjdk-11-jdk
+    apt-get install -y wget openjdk-11-jdk curl
 
-# Set environment variables
 ENV JENKINS_HOME=/var/jenkins_home
 ENV JENKINS_PORT=8080
 
-# Create Jenkins home directory
 RUN mkdir -p $JENKINS_HOME
 
-# Create /logs directory and set permissions
 RUN mkdir -p /logs && \
     chown -R 1000:1000 /logs
 
-# Download Jenkins WAR file
 RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /usr/local/bin/jenkins.war
 
-# Expose the Jenkins port
+
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    gnupg \
+    lsb-release
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+RUN echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+RUN apt-get update && \
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+
 EXPOSE $JENKINS_PORT
 
-# Run Jenkins
 CMD ["java", "-jar", "/usr/local/bin/jenkins.war"]

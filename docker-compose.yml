@@ -48,7 +48,24 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
-        
+
+
+  jenkins:
+    build:
+        context: .
+        dockerfile: Dockerfile-jenkins    
+    container_name: my-jenkins-container
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/ubuntu/logs:/logs/ 
+    restart: always
+    networks:
+      cluster_network:
+         ipv4_address: 192.168.16.22
 networks:
   cluster_network:
     driver: bridge
@@ -56,3 +73,6 @@ networks:
       config:
         - subnet: 192.168.16.0/20
 
+
+volumes:
+  jenkins_home:
