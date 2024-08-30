@@ -26,7 +26,5 @@ service corosync start
 
 echo "Starting Pacemaker..."
 service pacemaker start
-
+/usr/sbin/sshd 
 apachectl -D FOREGROUND
-
-

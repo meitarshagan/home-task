@@ -1,12 +1,28 @@
 FROM ubuntu:18.04
 
+
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y apache2
 
-RUN apt-get install -y corosync pacemaker crmsh vim
+RUN apt-get install -y iproute2 corosync pacemaker crmsh vim fence-agents
+
+
+RUN apt-get update && \
+    apt-get install -y openssh-server && \
+    apt-get clean
+
+RUN mkdir /var/run/sshd
+
+RUN mkdir -p /root/.ssh && \
+    ssh-keygen -t rsa -b 2048 -f /root/.ssh/id_rsa -N "" && \
+    cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+
+EXPOSE 22
 
 EXPOSE 5405/udp 2224/tcp
+
+COPY floating-ip.sh /floating-ip.sh  
 
 COPY start-service.sh /start-service.sh
 
