@@ -1,6 +1,7 @@
 # Base image
 FROM ubuntu:18.04
 
+
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y wget openjdk-11-jdk
@@ -20,4 +21,3 @@ EXPOSE $JENKINS_PORT
 
 # Run Jenkins
 CMD ["java", "-jar", "/usr/local/bin/jenkins.war"]
-
