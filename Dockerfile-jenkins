@@ -12,6 +12,10 @@ ENV JENKINS_PORT=8080
 # Create Jenkins home directory
 RUN mkdir -p $JENKINS_HOME
 
+# Create /logs directory and set permissions
+RUN mkdir -p /logs && \
+    chown -R 1000:1000 /logs
+
 # Download Jenkins WAR file
 RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /usr/local/bin/jenkins.war
 
